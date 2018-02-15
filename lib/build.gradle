@@ -2,6 +2,10 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 
+kapt {
+    generateStubs = true
+}
+
 
 ext {
     bintrayOrg = 'quickbirdstudios'
@@ -18,7 +22,7 @@ ext {
     siteUrl = 'http://quickbirdstudios.com'
 
 
-    libraryVersion = '0.0.6'
+    libraryVersion = '0.0.7'
 
     developerId = 'quickbirdstudios'
     developerName = 'QuickBird Studios GmbH'
@@ -69,8 +73,10 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation "io.reactivex.rxjava2:rxjava:2.1.5"
+    kapt 'com.android.databinding:compiler:3.0.1'
 
-    api 'com.quickbirdstudios:rx-extensions:0.0.6'
+
+    api 'com.quickbirdstudios:rx-extensions:0.0.7'
 }
 repositories {
     mavenCentral()
