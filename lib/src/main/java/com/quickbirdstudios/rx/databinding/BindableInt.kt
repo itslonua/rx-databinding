@@ -9,7 +9,7 @@ import io.reactivex.subjects.Subject
 /**
  * Created by sebastiansellmair on 14.02.18.
  */
-class BindableInt() : ObservableInt() {
+class BindableInt() : ObservableInt(), Disposable {
     private var subscription: Disposable? = null
     private val subject: Subject<Int> = BehaviorSubject.create()
 
@@ -21,10 +21,22 @@ class BindableInt() : ObservableInt() {
         }
     }
 
+    constructor(initial: Int = 0) : this() {
+        set(initial)
+    }
+
     override fun set(value: Int) {
         super.set(value)
         subject.onNext(value)
     }
 
     fun toObservable(): Observable<Int> = subject
+
+    override fun isDisposed(): Boolean {
+        return subscription?.isDisposed ?: false
+    }
+
+    override fun dispose() {
+        subscription?.dispose()
+    }
 }

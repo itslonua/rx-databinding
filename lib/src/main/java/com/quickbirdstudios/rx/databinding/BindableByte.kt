@@ -9,7 +9,7 @@ import io.reactivex.subjects.Subject
 /**
  * Created by sebastiansellmair on 14.02.18.
  */
-class BindableByte() : ObservableByte() {
+class BindableByte() : ObservableByte(), Disposable {
     private var subscription: Disposable? = null
     private val subject: Subject<Byte> = BehaviorSubject.create()
 
@@ -21,10 +21,22 @@ class BindableByte() : ObservableByte() {
         }
     }
 
+    constructor(initial: Byte = 0) : this() {
+        set(initial)
+    }
+
     override fun set(value: Byte) {
         super.set(value)
         subject.onNext(value)
     }
 
     fun toObservable(): Observable<Byte> = subject
+
+    override fun isDisposed(): Boolean {
+        return subscription?.isDisposed ?: false
+    }
+
+    override fun dispose() {
+        subscription?.dispose()
+    }
 }

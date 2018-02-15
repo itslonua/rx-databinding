@@ -9,7 +9,7 @@ import io.reactivex.subjects.Subject
 /**
  * Created by sebastiansellmair on 14.02.18.
  */
-class BindableShort() : ObservableShort() {
+class BindableShort() : ObservableShort(), Disposable {
     private var subscription: Disposable? = null
     private val subject: Subject<Short> = BehaviorSubject.create()
 
@@ -21,10 +21,22 @@ class BindableShort() : ObservableShort() {
         }
     }
 
+    constructor(initial: Short = 0) : this() {
+        set(initial)
+    }
+
     override fun set(value: Short) {
         super.set(value)
         subject.onNext(value)
     }
 
     fun toObservable(): Observable<Short> = subject
+
+    override fun isDisposed(): Boolean {
+        return subscription?.isDisposed ?: false
+    }
+
+    override fun dispose() {
+        subscription?.dispose()
+    }
 }
