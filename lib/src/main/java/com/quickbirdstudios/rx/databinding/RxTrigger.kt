@@ -15,7 +15,7 @@ class RxTrigger {
 
     fun trigger() = subject.onNext(Unit)
 
-    fun toObservable() = trigger()
+    fun toObservable() = subject
 
     operator fun invoke() {
         this.trigger()
